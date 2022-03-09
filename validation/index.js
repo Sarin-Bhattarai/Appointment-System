@@ -37,7 +37,28 @@ const loginUserValidation = () => {
   ];
 };
 
+const categoryValidation = () => {
+  return [
+    body("name")
+      .isString()
+      .withMessage("Invalid Category")
+      .isLength({ min: 3, max: 30 }),
+  ];
+};
+
+const editcategoryValidation = () => {
+  return [
+    body("name")
+      .optional()
+      .isString()
+      .withMessage("Invalid Category")
+      .isLength({ min: 3, max: 30 }),
+  ];
+};
+
 module.exports = {
   registerUserValidation,
   loginUserValidation,
+  categoryValidation,
+  editcategoryValidation,
 };

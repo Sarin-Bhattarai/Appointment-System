@@ -23,3 +23,49 @@ exports.listCategory = (req, res) => {
     res.json(data);
   });
 };
+
+exports.readCategory = async (req, res) => {
+  const id = req.params.categoryId;
+  try {
+    const category = await Category.findById(req.params.categoryId);
+    return res.status(200).json({
+      status: "Success",
+      data: { category: category },
+    });
+  } catch (ex) {
+    return res
+      .status(400)
+      .send({ status: "error", message: "Cannot get Category" });
+  }
+};
+
+exports.updateCategory = async (req, res) => {
+  const id = req.params.categoryId;
+  try {
+    const category = await Category.findById(req.params.categoryId);
+    if (req.body.name) {
+      category.name = req.body.name;
+    }
+    const updatedCategory = await category.save();
+    return res
+      .status(200)
+      .send({ status: "success", data: { category: updatedCategory } });
+  } catch (ex) {
+    return res
+      .status(400)
+      .send({ status: "error", message: "Something went wrong" });
+  }
+};
+
+exports.removeCategory = async (req, res) => {
+  const id = req.params.categoryId;
+  try {
+    await Category.deleteOne({ _id: id });
+    return res
+      .status(200)
+      .send({ status: "Sucess", message: "Category Deleted" });
+  } catch (ex) {
+    console.log(ex);
+    return res.status(400).send({ status: "error", message: ex.message });
+  }
+};
