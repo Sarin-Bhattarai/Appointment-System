@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const categoryRoutes = require("./routes/category");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const app = express();
 app.use(express.json());
@@ -18,6 +20,29 @@ mongoose
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    components: {},
+    info: {
+      version: "1.0.0",
+      title: "Appointment API",
+      descritption: "Appointment API information",
+      contact: {
+        name: "Sarin Bhattarai",
+      },
+      servers: [
+        {
+          url: "http://localhost:3000",
+        },
+      ],
+    },
+  },
+  apis: ["./routes/user.js", "./routes/category.js", "./routes/auth.js"],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const port = process.env.PORT || 3000;
 

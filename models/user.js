@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
@@ -20,6 +21,14 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: Number,
       required: true,
+    },
+    designation: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: ObjectId,
+      ref: "Category",
     },
     address: {
       type: String,
