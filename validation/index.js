@@ -56,9 +56,20 @@ const editcategoryValidation = () => {
   ];
 };
 
+const appointmentValidation = () => {
+  return [
+    body("title").isString().withMessage("Not a valid title"),
+    body("startTime").isDate().withMessage("Not a valid date"),
+    body("endTime").isDate().withMessage("Not a valid date"),
+    body("user").isString().withMessage("Not a valid user"),
+    body("status").isString().withMessage("Not a valid status"),
+  ];
+};
+
 module.exports = {
   registerUserValidation,
   loginUserValidation,
   categoryValidation,
   editcategoryValidation,
+  appointmentValidation,
 };

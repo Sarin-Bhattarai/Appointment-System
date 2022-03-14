@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const categoryRoutes = require("./routes/category");
+const appointmentRoutes = require("./routes/appointment");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
@@ -20,6 +21,7 @@ mongoose
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
+app.use("/api", appointmentRoutes);
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -38,7 +40,12 @@ const swaggerOptions = {
       ],
     },
   },
-  apis: ["./routes/user.js", "./routes/category.js", "./routes/auth.js"],
+  apis: [
+    "./routes/user.js",
+    "./routes/category.js",
+    "./routes/auth.js",
+    "./routes/appointment.js",
+  ],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
