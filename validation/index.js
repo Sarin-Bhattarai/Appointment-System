@@ -1,4 +1,5 @@
 const { body } = require("express-validator");
+const Appointment = require("../models/appointment");
 
 const registerUserValidation = () => {
   return [
@@ -59,10 +60,27 @@ const editcategoryValidation = () => {
 const appointmentValidation = () => {
   return [
     body("title").isString().withMessage("Not a valid title"),
-    body("startTime").isDate().withMessage("Not a valid date"),
-    body("endTime").isDate().withMessage("Not a valid date"),
+    body("date").isDate().withMessage("Not a valid date"),
     body("user").isString().withMessage("Not a valid user"),
     body("status").isString().withMessage("Not a valid status"),
+  ];
+};
+function validateBeginsAt() {
+  const date = Date.now();
+  return [
+    body("beginsAt").custom(async (value) => {
+      if (date !== value) {
+        throw new Error("Date not Valid");
+      }
+      return Promise.resolve();
+    }),
+  ];
+}
+
+const editAppointmentValidation = () => {
+  return [
+    body("title").optional().isString().withMessage("Not a valid title"),
+    body("status").optional().isString().withMessage("Not a valid status"),
   ];
 };
 
@@ -72,4 +90,6 @@ module.exports = {
   categoryValidation,
   editcategoryValidation,
   appointmentValidation,
+  editAppointmentValidation,
+  validateBeginsAt,
 };
