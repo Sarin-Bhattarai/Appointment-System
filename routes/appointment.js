@@ -9,19 +9,23 @@ const {
   createAppointment,
   editAppointment,
   deleteAppointment,
+  readSingleAppointment,
 } = require("../controllers/appointment");
 const {
   appointmentValidation,
   editAppointmentValidation,
-  validateBeginsAt,
+  // validateBeginsAt,
 } = require("../validation");
 
 router.get("/appointments", getAppointment);
 
+//Getting single Appointment
+router.get("/appointment/:appointmentId", readSingleAppointment);
+
 router.post(
   "/appointment/create/:userId",
   appointmentValidation(),
-  validateBeginsAt(),
+  // validateBeginsAt(),
   handleError,
   verifyLogin,
   isAdmin,

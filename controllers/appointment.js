@@ -65,3 +65,18 @@ exports.deleteAppointment = async (req, res) => {
     return res.status(400).send({ status: "error", message: ex.message });
   }
 };
+
+exports.readSingleAppointment = async (req, res) => {
+  const id = req.params.appointmentId;
+  try {
+    const appointment = await Appointment.findById(req.params.appointmentId);
+    return res.status(200).json({
+      status: "Success",
+      data: { appointment: appointment },
+    });
+  } catch (ex) {
+    return res
+      .status(400)
+      .send({ status: "error", message: "Cannot get Appointment" });
+  }
+};

@@ -65,17 +65,23 @@ const appointmentValidation = () => {
     body("status").isString().withMessage("Not a valid status"),
   ];
 };
-function validateBeginsAt() {
-  const date = Date.now();
-  return [
-    body("beginsAt").custom(async (value) => {
-      if (date !== value) {
-        throw new Error("Date not Valid");
-      }
-      return Promise.resolve();
-    }),
-  ];
-}
+
+// function validateBeginsAt() {
+//   const currentDate = new Date();
+//   currentDate.getHours();
+//   currentDate.getMinutes();
+//   currentDate.getSeconds();
+
+//   return [
+//     body("beginsAt").custom(async (value) => {
+//       if (value >= currentDate) {
+//         return Promise.resolve();
+//       } else {
+//         throw new Error("Date not Valid");
+//       }
+//     }),
+//   ];
+// }
 
 const editAppointmentValidation = () => {
   return [
@@ -91,5 +97,5 @@ module.exports = {
   editcategoryValidation,
   appointmentValidation,
   editAppointmentValidation,
-  validateBeginsAt,
+  // validateBeginsAt,
 };
