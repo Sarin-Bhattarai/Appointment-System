@@ -8,58 +8,6 @@ const { verifyLogin } = require("../middlewares/verifyLogin");
 
 const router = express.Router();
 
-/**
- * @swagger
- * /api/register/:
- *  post:
- *    summary: register the user
- *    tags: [User]
- *    parameters:
- *      - in: body
- *        name: name
- *        schema:
- *         - type: String
- *        required: true
- *        description: The User Name
- *      - in: body
- *        name: email
- *        schema:
- *         - type: String
- *        required: true
- *        description: The User Email
- *      - in: body
- *        name: password
- *        schema:
- *         - type: String
- *        required: true
- *        description: The User Password
- *      - in: body
- *        name: phone
- *        schema:
- *         - type: Number
- *        required: true
- *        description: The User Phone
- *      - in: body
- *        name: designation
- *        schema:
- *         - type: String
- *        required: true
- *        description: The User Designation
- *      - in: body
- *        name: role
- *        schema:
- *         - type: String
- *        required: true
- *        description: The Role
- *    requestBody:
- *      required: true
- *    responses:
- *      200:
- *        description: User Registered
- *      404:
- *        description: ex.message
- */
-
 //for registering the User
 router.post(
   "/register",
