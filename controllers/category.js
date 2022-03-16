@@ -29,13 +29,13 @@ exports.readCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.categoryId);
     return res.status(200).json({
-      status: "Success",
+      status: "success",
       data: { category: category },
     });
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "Cannot get Category" });
+      .send({ status: "error", message: "cannot get category" });
   }
 };
 
@@ -53,7 +53,7 @@ exports.updateCategory = async (req, res) => {
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "Something went wrong" });
+      .send({ status: "error", message: "something went wrong" });
   }
 };
 
@@ -63,7 +63,7 @@ exports.removeCategory = async (req, res) => {
     await Category.deleteOne({ _id: id });
     return res
       .status(200)
-      .send({ status: "Sucess", message: "Category Deleted" });
+      .send({ status: "sucess", message: "category deleted" });
   } catch (ex) {
     console.log(ex);
     return res.status(400).send({ status: "error", message: ex.message });

@@ -59,7 +59,7 @@ exports.deleteAppointment = async (req, res) => {
     await Appointment.deleteOne({ _id: id });
     return res
       .status(200)
-      .send({ status: "Sucess", message: "Appointment Deleted" });
+      .send({ status: "sucess", message: "appointment deleted" });
   } catch (ex) {
     console.log(ex);
     return res.status(400).send({ status: "error", message: ex.message });
@@ -71,12 +71,12 @@ exports.readSingleAppointment = async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.appointmentId);
     return res.status(200).json({
-      status: "Success",
+      status: "success",
       data: { appointment: appointment },
     });
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "Cannot get Appointment" });
+      .send({ status: "error", message: "cannot get appointment" });
   }
 };

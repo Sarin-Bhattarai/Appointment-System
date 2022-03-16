@@ -11,19 +11,19 @@ router.post("/login", loginUserValidation(), handleError, async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return res.status(400).json("User doesn't exist");
+      return res.status(400).json("user doesn't exist");
     }
     const validatePassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
     if (!validatePassword) {
-      return res.status(400).json({ message: "Invalid Password" });
+      return res.status(400).json({ message: "invalid password" });
     }
     const token = jwt.sign({ _id: user._id }, process.env.JWT_PRIVATE_KEY);
     res.header("x-auth-token", token).send(token);
   } catch (error) {
-    return res.status(400).json({ status: "Error", message: error.message });
+    return res.status(400).json({ status: "error", message: error.message });
   }
 });
 

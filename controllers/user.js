@@ -17,8 +17,8 @@ module.exports = {
 
       if (!user) {
         return res.status(400).json({
-          status: "Success",
-          message: "Something went wrong, Please try again!",
+          status: "success",
+          message: "something went wrong, please try again!",
         });
       }
       if (name) {
@@ -36,7 +36,7 @@ module.exports = {
       }
       const updatedDetails = await user.save();
       return res.status(200).json({
-        status: "Success",
+        status: "success",
         data: {
           user: updatedDetails,
         },
@@ -44,7 +44,7 @@ module.exports = {
     } catch (ex) {
       return res
         .status(400)
-        .send({ status: "error", message: "Something went wrong" });
+        .send({ status: "error", message: "something went wrong" });
     }
   },
 };

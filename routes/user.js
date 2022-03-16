@@ -35,7 +35,7 @@ router.post(
         if (user.length > 0) {
           return res.status(500).json({
             status: "fail",
-            data: { user: "User is already Registered" },
+            data: { user: "user is already registered" },
           });
         } else {
           const user = new User(userData);
@@ -62,13 +62,13 @@ router.get("/doctor/:categoryId", async (req, res) => {
   try {
     const user = await User.find({ category: req.params.categoryId });
     return res.status(200).json({
-      status: "Success",
+      status: "success",
       data: { user: user },
     });
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "Cannot get User" });
+      .send({ status: "error", message: "cannot get user" });
   }
 });
 
