@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
+const Appointment = require("../models/appointment");
 const bcrypt = require("bcrypt");
 const { registerUserValidation } = require("../validation");
 const handleError = require("../helper/handleError");
@@ -56,8 +57,12 @@ router.get("/user", verifyLogin, userController.profile);
 
 router.put("/user/update", verifyLogin, userController.updateProfile);
 
+/**
+ * @Doctor Routes
+ */
+
 //get doctor based on categories
-router.get("/doctor/:categoryId", async (req, res) => {
+router.get("/doctor/:categoryId", verifyLogin, async (req, res) => {
   const id = req.params.categoryId;
   try {
     const user = await User.find({ category: req.params.categoryId });
@@ -71,5 +76,45 @@ router.get("/doctor/:categoryId", async (req, res) => {
       .send({ status: "error", message: "cannot get user" });
   }
 });
+
+//get appointments according to doctor
+router.get("/appointment/:userId", verifyLogin, async (req, res) => {
+  const id = req.params.userId;
+  try {
+    const appointment = await Appointment.find({ user: req.params.userId });
+    return res.status(200).json({
+      status: "success",
+      data: { appointment: appointment },
+    });
+  } catch {
+    return res
+      .status(400)
+      .send({ status: "error", message: "cannot get appointments" });
+  }
+});
+
+//editing appointments from doctor
+router.put(
+  "/appointment/:appointmentId/:userId",
+  verifyLogin,
+  async (req, res) => {
+    const id = req.params.appointmentId;
+    try {
+      const appointment = await Appointment.findById(req.params.appointmentId);
+
+      if (req.body.status) {
+        appointment.status = req.body.status;
+      }
+      const result = await appointment.save();
+      return res
+        .status(200)
+        .json({ status: "success", data: { appointment: result } });
+    } catch {
+      return res
+        .status(400)
+        .json({ status: "error", message: "something went wrong" });
+    }
+  }
+);
 
 module.exports = router;
