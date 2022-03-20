@@ -7,6 +7,7 @@ const categoryRoutes = require("./routes/category");
 const appointmentRoutes = require("./routes/appointment");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const { devErrorHandler } = require("./helper/catchHandler");
 
 const app = express();
 app.use(express.json());
@@ -60,6 +61,7 @@ app.use("*", (req, res, next) => {
     data: { url: "api not found" },
   });
 });
+app.use(devErrorHandler);
 
 const port = process.env.PORT || 3000;
 

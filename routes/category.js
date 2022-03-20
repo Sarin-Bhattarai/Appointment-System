@@ -18,7 +18,7 @@ router.get("/categories/:categoryId", readCategory);
 
 //for creating the category
 router.post(
-  "/categories/create",
+  "/categories",
   categoryValidation(),
   handleError,
   verifyLogin,
