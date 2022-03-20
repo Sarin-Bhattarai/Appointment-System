@@ -14,11 +14,11 @@ const { categoryValidation, editcategoryValidation } = require("../validation");
 const handleError = require("../helper/handleError");
 
 //for getting single category
-router.get("/category/:categoryId", readCategory);
+router.get("/categories/:categoryId", readCategory);
 
 //for creating the category
 router.post(
-  "/category/create/:userId",
+  "/categories/create",
   categoryValidation(),
   handleError,
   verifyLogin,
@@ -31,7 +31,7 @@ router.get("/categories", listCategory);
 
 //for editing the category
 router.put(
-  "/category/:categoryId",
+  "/categories/:categoryId",
   editcategoryValidation(),
   handleError,
   verifyLogin,
@@ -40,6 +40,6 @@ router.put(
 );
 
 //for deleting category
-router.delete("/category/:categoryId", verifyLogin, isAdmin, removeCategory);
+router.delete("/categories/:categoryId", verifyLogin, isAdmin, removeCategory);
 
 module.exports = router;

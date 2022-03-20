@@ -44,7 +44,7 @@ module.exports = {
     } catch (ex) {
       return res
         .status(400)
-        .send({ status: "error", message: "something went wrong" });
+        .json({ status: "error", message: "something went wrong" });
     }
   },
 };

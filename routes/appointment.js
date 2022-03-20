@@ -20,10 +20,10 @@ const {
 router.get("/appointments", getAppointment);
 
 //Getting single Appointment
-router.get("/appointment/:appointmentId", readSingleAppointment);
+router.get("/appointments/:appointmentId", readSingleAppointment);
 
 router.post(
-  "/appointment/create/:userId",
+  "/appointments",
   appointmentValidation(),
   // validateBeginsAt(),
   handleError,
@@ -33,7 +33,7 @@ router.post(
 );
 
 router.put(
-  "/appointment/:appointmentId",
+  "/appointments/:appointmentId",
   editAppointmentValidation(),
   handleError,
   verifyLogin,
@@ -42,7 +42,7 @@ router.put(
 );
 
 router.delete(
-  "/appointment/:appointmentId",
+  "/appointments/:appointmentId",
   verifyLogin,
   isAdmin,
   deleteAppointment

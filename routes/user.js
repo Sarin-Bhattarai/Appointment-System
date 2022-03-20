@@ -47,23 +47,22 @@ router.post(
         }
       });
     } catch (ex) {
-      res.status(400).send({ status: "error", message: ex.message });
+      res.status(400).json({ status: "error", message: ex.message });
     }
   }
 );
 
 //user profile get and update
-router.get("/user", verifyLogin, userController.profile);
+router.get("/users", verifyLogin, userController.profile);
 
-router.put("/user/update", verifyLogin, userController.updateProfile);
+router.put("/users", verifyLogin, userController.updateProfile);
 
 /**
  * @Doctor Routes
  */
 
 //get doctor based on categories
-router.get("/doctor/:categoryId", verifyLogin, async (req, res) => {
-  const id = req.params.categoryId;
+router.get("/users/:categoryId", verifyLogin, async (req, res) => {
   try {
     const user = await User.find({ category: req.params.categoryId });
     return res.status(200).json({
@@ -73,13 +72,12 @@ router.get("/doctor/:categoryId", verifyLogin, async (req, res) => {
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "cannot get user" });
+      .json({ status: "error", message: "cannot get user" });
   }
 });
 
 //get appointments according to doctor
-router.get("/appointment/:userId", verifyLogin, async (req, res) => {
-  const id = req.params.userId;
+router.get("/appointments/:userId", verifyLogin, async (req, res) => {
   try {
     const appointment = await Appointment.find({ user: req.params.userId });
     return res.status(200).json({
@@ -89,16 +87,15 @@ router.get("/appointment/:userId", verifyLogin, async (req, res) => {
   } catch {
     return res
       .status(400)
-      .send({ status: "error", message: "cannot get appointments" });
+      .json({ status: "error", message: "cannot get appointments" });
   }
 });
 
 //editing appointments from doctor
 router.put(
-  "/appointment/:appointmentId/:userId",
+  "/appointments/:appointmentId/:userId",
   verifyLogin,
   async (req, res) => {
-    const id = req.params.appointmentId;
     try {
       const appointment = await Appointment.findById(req.params.appointmentId);
 

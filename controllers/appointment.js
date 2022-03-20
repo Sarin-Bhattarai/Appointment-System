@@ -28,7 +28,7 @@ exports.createAppointment = async (req, res) => {
     const result = await appointment.save();
     return res.json({ status: "success", data: { appointment: result } });
   } catch (ex) {
-    return res.send({ status: "error", message: ex.message });
+    return res.json({ status: "error", message: ex.message });
   }
 };
 
@@ -45,11 +45,11 @@ exports.editAppointment = async (req, res) => {
     const result = await appointment.save();
     return res
       .status(200)
-      .send({ status: "success", data: { appointment: result } });
+      .json({ status: "success", data: { appointment: result } });
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "something went wrong" });
+      .json({ status: "error", message: "something went wrong" });
   }
 };
 
@@ -59,15 +59,14 @@ exports.deleteAppointment = async (req, res) => {
     await Appointment.deleteOne({ _id: id });
     return res
       .status(200)
-      .send({ status: "sucess", message: "appointment deleted" });
+      .json({ status: "sucess", message: "appointment deleted" });
   } catch (ex) {
     console.log(ex);
-    return res.status(400).send({ status: "error", message: ex.message });
+    return res.status(400).json({ status: "error", message: ex.message });
   }
 };
 
 exports.readSingleAppointment = async (req, res) => {
-  const id = req.params.appointmentId;
   try {
     const appointment = await Appointment.findById(req.params.appointmentId);
     return res.status(200).json({
@@ -77,6 +76,6 @@ exports.readSingleAppointment = async (req, res) => {
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "cannot get appointment" });
+      .json({ status: "error", message: "cannot get appointment" });
   }
 };

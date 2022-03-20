@@ -51,6 +51,16 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+/**
+ * @Displaying error message for undefined Api's
+ */
+app.use("*", (req, res, next) => {
+  return res.json({
+    status: "fail",
+    data: { url: "api not found" },
+  });
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

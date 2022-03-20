@@ -25,7 +25,6 @@ exports.listCategory = (req, res) => {
 };
 
 exports.readCategory = async (req, res) => {
-  const id = req.params.categoryId;
   try {
     const category = await Category.findById(req.params.categoryId);
     return res.status(200).json({
@@ -35,12 +34,11 @@ exports.readCategory = async (req, res) => {
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "cannot get category" });
+      .json({ status: "error", message: "cannot get category" });
   }
 };
 
 exports.updateCategory = async (req, res) => {
-  const id = req.params.categoryId;
   try {
     const category = await Category.findById(req.params.categoryId);
     if (req.body.name) {
@@ -49,11 +47,11 @@ exports.updateCategory = async (req, res) => {
     const updatedCategory = await category.save();
     return res
       .status(200)
-      .send({ status: "success", data: { category: updatedCategory } });
+      .json({ status: "success", data: { category: updatedCategory } });
   } catch (ex) {
     return res
       .status(400)
-      .send({ status: "error", message: "something went wrong" });
+      .json({ status: "error", message: "something went wrong" });
   }
 };
 
@@ -63,9 +61,9 @@ exports.removeCategory = async (req, res) => {
     await Category.deleteOne({ _id: id });
     return res
       .status(200)
-      .send({ status: "sucess", message: "category deleted" });
+      .json({ status: "sucess", message: "category deleted" });
   } catch (ex) {
     console.log(ex);
-    return res.status(400).send({ status: "error", message: ex.message });
+    return res.status(400).json({ status: "error", message: ex.message });
   }
 };
