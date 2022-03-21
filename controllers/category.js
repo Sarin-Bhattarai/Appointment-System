@@ -25,45 +25,28 @@ exports.listCategory = (req, res) => {
 };
 
 exports.readCategory = async (req, res) => {
-  try {
-    const category = await Category.findById(req.params.categoryId);
-    return res.status(200).json({
-      status: "success",
-      data: { category: category },
-    });
-  } catch (ex) {
-    return res
-      .status(400)
-      .json({ status: "error", message: "cannot get category" });
-  }
+  const category = await Category.findById(req.params.categoryId);
+  return res.status(200).json({
+    status: "success",
+    data: { category: category },
+  });
 };
 
 exports.updateCategory = async (req, res) => {
-  try {
-    const category = await Category.findById(req.params.categoryId);
-    if (req.body.name) {
-      category.name = req.body.name;
-    }
-    const updatedCategory = await category.save();
-    return res
-      .status(200)
-      .json({ status: "success", data: { category: updatedCategory } });
-  } catch (ex) {
-    return res
-      .status(400)
-      .json({ status: "error", message: "something went wrong" });
+  const category = await Category.findById(req.params.categoryId);
+  if (req.body.name) {
+    category.name = req.body.name;
   }
+  const updatedCategory = await category.save();
+  return res
+    .status(200)
+    .json({ status: "success", data: { category: updatedCategory } });
 };
 
 exports.removeCategory = async (req, res) => {
   const id = req.params.categoryId;
-  try {
-    await Category.deleteOne({ _id: id });
-    return res
-      .status(200)
-      .json({ status: "sucess", message: "category deleted" });
-  } catch (ex) {
-    console.log(ex);
-    return res.status(400).json({ status: "error", message: ex.message });
-  }
+  await Category.deleteOne({ _id: id });
+  return res
+    .status(200)
+    .json({ status: "sucess", message: "category deleted" });
 };
