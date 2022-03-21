@@ -1,36 +1,24 @@
 const User = require("../models/user");
+const Appointment = require("../models/appointment");
 const bcrypt = require("bcrypt");
 
 module.exports = {
   registerUser: async (req, res) => {
-    const userData = {
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      phone: req.body.phone,
-      designation: req.body.designation,
-      role: req.body.role,
-    };
-    const salt = await bcrypt.genSalt(10);
-    userData.password = await bcrypt.hash(userData.password, salt);
-    User.find({ email: req.body.email }, async (error, user) => {
-      if (error) {
-        return res
-          .status(400)
-          .json({ status: "error", message: error.message });
-      }
-      if (user.length > 0) {
-        return res.status(500).json({
-          status: "fail",
-          data: { user: "user is already registered" },
-        });
-      } else {
-        const user = new User(userData);
-        const result = await user.save();
-        return res
-          .status(200)
-          .json({ status: "success", data: { user: user } });
-      }
+    const inspectUser = await User.findOne({ email: req.body.email });
+    if (inspectUser) {
+      return res.status(400).json({
+        status: "error",
+        message: "email already in use",
+      });
+    }
+    const newUser = new User({
+      ...req.body,
+      password: bcrypt.hashSync(req.body.password, 10),
+    });
+    const result = await newUser.save();
+    return res.status(200).json({
+      status: "success",
+      data: { user: result },
     });
   },
 
@@ -74,5 +62,36 @@ module.exports = {
         user: updatedDetails,
       },
     });
+  },
+
+  /**
+   * @Doctor Controllers
+   */
+
+  doctorBasedOnCategory: async (req, res) => {
+    const user = await User.find({ category: req.params.categoryId });
+    return res.status(200).json({
+      status: "success",
+      data: { user: user },
+    });
+  },
+
+  appointmentsAccToDoctor: async (req, res) => {
+    const appointment = await Appointment.find({ user: req.params.userId });
+    return res.status(200).json({
+      status: "success",
+      data: { appointment: appointment },
+    });
+  },
+
+  editAppointmentDoctor: async (req, res) => {
+    const appointment = await Appointment.findById(req.params.appointmentId);
+    if (req.body.status) {
+      appointment.status = req.body.status;
+    }
+    const result = await appointment.save();
+    return res
+      .status(200)
+      .json({ status: "success", data: { appointment: result } });
   },
 };
