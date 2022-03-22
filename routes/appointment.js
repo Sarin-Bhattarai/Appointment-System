@@ -1,51 +1,50 @@
 const express = require("express");
 const router = express.Router();
-
 const { verifyLogin } = require("../middlewares/verifyLogin");
 const handleError = require("../helper/handleError");
 const { isAdmin } = require("../controllers/auth");
-const {
-  getAppointment,
-  createAppointment,
-  editAppointment,
-  deleteAppointment,
-  readSingleAppointment,
-} = require("../controllers/appointment");
+const appointmentController = require("../controllers/appointment");
+const { wrapAsync } = require("../helper/catchHandler");
 const {
   appointmentValidation,
   editAppointmentValidation,
-  // validateBeginsAt,
 } = require("../validation");
 
-router.get("/appointments", getAppointment);
+/**
+ * @Appointment routes Start here
+ */
+
+router.get("/appointments", wrapAsync(appointmentController.getAppointment));
 
 //Getting single Appointment
-router.get("/appointment/:appointmentId", readSingleAppointment);
+router.get(
+  "/appointments/:appointmentId",
+  wrapAsync(appointmentController.readSingleAppointment)
+);
 
 router.post(
-  "/appointment/create/:userId",
+  "/appointments",
   appointmentValidation(),
-  // validateBeginsAt(),
   handleError,
-  // verifyLogin,
-  // isAdmin,
-  createAppointment
+  verifyLogin,
+  isAdmin,
+  wrapAsync(appointmentController.createAppointment)
 );
 
 router.put(
-  "/appointment/:appointmentId",
+  "/appointments/:appointmentId",
   editAppointmentValidation(),
   handleError,
   verifyLogin,
   isAdmin,
-  editAppointment
+  wrapAsync(appointmentController.editAppointment)
 );
 
 router.delete(
-  "/appointment/:appointmentId",
+  "/appointments/:appointmentId",
   verifyLogin,
   isAdmin,
-  deleteAppointment
+  wrapAsync(appointmentController.deleteAppointment)
 );
 
 module.exports = router;

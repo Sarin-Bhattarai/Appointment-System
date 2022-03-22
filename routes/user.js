@@ -1,120 +1,52 @@
 const express = require("express");
-const User = require("../models/user");
-const Appointment = require("../models/appointment");
-const bcrypt = require("bcrypt");
 const { registerUserValidation } = require("../validation");
 const handleError = require("../helper/handleError");
 const userController = require("../controllers/user");
 const { verifyLogin } = require("../middlewares/verifyLogin");
+const { wrapAsync } = require("../helper/catchHandler");
 
 const router = express.Router();
+
+/**
+ * @User Routes
+ */
 
 //for registering the User
 router.post(
   "/register",
   registerUserValidation(),
   handleError,
-  async (req, res) => {
-    const userData = {
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      phone: req.body.phone,
-      designation: req.body.designation,
-      role: req.body.role,
-    };
-    const salt = await bcrypt.genSalt(10);
-    userData.password = await bcrypt.hash(userData.password, salt);
-
-    try {
-      User.find({ email: req.body.email }, async (error, user) => {
-        if (error) {
-          return res
-            .status(400)
-            .json({ status: "error", message: error.message });
-        }
-        if (user.length > 0) {
-          return res.status(500).json({
-            status: "fail",
-            data: { user: "user is already registered" },
-          });
-        } else {
-          const user = new User(userData);
-          const result = await user.save();
-          return res
-            .status(200)
-            .json({ status: "success", data: { user: user } });
-        }
-      });
-    } catch (ex) {
-      res.status(400).send({ status: "error", message: ex.message });
-    }
-  }
+  wrapAsync(userController.registerUser)
 );
 
 //user profile get and update
-router.get("/user", verifyLogin, userController.profile);
+router.get("/users", verifyLogin, wrapAsync(userController.profile));
 
-router.put("/user/update", verifyLogin, userController.updateProfile);
+router.put("/users", verifyLogin, wrapAsync(userController.updateProfile));
 
 /**
  * @Doctor Routes
  */
 
 //get doctor based on categories
-router.get("/doctor/:categoryId", verifyLogin, async (req, res) => {
-  const id = req.params.categoryId;
-  try {
-    const user = await User.find({ category: req.params.categoryId });
-    return res.status(200).json({
-      status: "success",
-      data: { user: user },
-    });
-  } catch (ex) {
-    return res
-      .status(400)
-      .send({ status: "error", message: "cannot get user" });
-  }
-});
+router.get(
+  "/users/:categoryId",
+  verifyLogin,
+  wrapAsync(userController.doctorBasedOnCategory)
+);
 
 //get appointments according to doctor
-router.get("/appointment/:userId", verifyLogin, async (req, res) => {
-  const id = req.params.userId;
-  try {
-    const appointment = await Appointment.find({ user: req.params.userId });
-    return res.status(200).json({
-      status: "success",
-      data: { appointment: appointment },
-    });
-  } catch {
-    return res
-      .status(400)
-      .send({ status: "error", message: "cannot get appointments" });
-  }
-});
+router.get(
+  "/appointments/:userId",
+  verifyLogin,
+  wrapAsync(userController.appointmentsAccToDoctor)
+);
 
 //editing appointments from doctor
 router.put(
-  "/appointment/:appointmentId/:userId",
+  "/appointments/:appointmentId/:userId",
   verifyLogin,
-  async (req, res) => {
-    const id = req.params.appointmentId;
-    try {
-      const appointment = await Appointment.findById(req.params.appointmentId);
-
-      if (req.body.status) {
-        appointment.status = req.body.status;
-      }
-      const result = await appointment.save();
-      return res
-        .status(200)
-        .json({ status: "success", data: { appointment: result } });
-    } catch {
-      return res
-        .status(400)
-        .json({ status: "error", message: "something went wrong" });
-    }
-  }
+  wrapAsync(userController.editAppointmentDoctor)
 );
 
 module.exports = router;

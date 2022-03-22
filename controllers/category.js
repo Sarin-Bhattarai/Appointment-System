@@ -1,30 +1,24 @@
 const Category = require("../models/category");
-const { errorHandler } = require("../helper/error");
 
 exports.createCategory = async (req, res) => {
   const category = new Category(req.body);
-  await category.save((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: errorHandler(err),
-      });
-    }
-    res.json({ data });
+  const result = await category.save();
+  return res.status(200).json({
+    message: "success",
+    data: { result: result },
   });
 };
 
-exports.listCategory = (req, res) => {
-  Category.find().exec((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: errorHandler(err),
-      });
-    }
-    res.json(data);
+exports.listCategory = async (req, res) => {
+  const category = await Category.find();
+  return res.status(200).json({
+    message: "success",
+    data: { category: category },
   });
 };
 
 exports.readCategory = async (req, res) => {
+<<<<<<< HEAD
   try {
     const category = await Category.findById(req.params.categoryId);
     return res.status(200).json({
@@ -52,18 +46,30 @@ exports.updateCategory = async (req, res) => {
     return res
       .status(400)
       .send({ status: "error", message: "something went wrong" });
+=======
+  const category = await Category.findById(req.params.categoryId);
+  return res.status(200).json({
+    status: "success",
+    data: { category: category },
+  });
+};
+
+exports.updateCategory = async (req, res) => {
+  const category = await Category.findById(req.params.categoryId);
+  if (req.body.name) {
+    category.name = req.body.name;
+>>>>>>> 6d3141556c291c1fe44b3f2974a1a952d3a0c414
   }
+  const updatedCategory = await category.save();
+  return res
+    .status(200)
+    .json({ status: "success", data: { category: updatedCategory } });
 };
 
 exports.removeCategory = async (req, res) => {
   const id = req.params.categoryId;
-  try {
-    await Category.deleteOne({ _id: id });
-    return res
-      .status(200)
-      .send({ status: "sucess", message: "category deleted" });
-  } catch (ex) {
-    console.log(ex);
-    return res.status(400).send({ status: "error", message: ex.message });
-  }
+  await Category.deleteOne({ _id: id });
+  return res
+    .status(200)
+    .json({ status: "sucess", message: "category deleted" });
 };

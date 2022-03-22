@@ -7,6 +7,7 @@ const categoryRoutes = require("./routes/category");
 const appointmentRoutes = require("./routes/appointment");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const { devErrorHandler } = require("./helper/catchHandler");
 
 const app = express();
 app.use(express.json());
@@ -54,12 +55,16 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use("*", (req, res, next)=>{
-  res.status(404).json({
+/**
+ * @Displaying error message for undefined Api's
+ */
+app.use("*", (req, res, next) => {
+  return res.json({
     status: "fail",
-    message: "APi not found"
+    data: { url: "api not found" },
   });
 });
+app.use(devErrorHandler);
 
 const port = process.env.PORT || 3000;
 

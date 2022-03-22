@@ -1,6 +1,27 @@
 const User = require("../models/user");
+const Appointment = require("../models/appointment");
+const bcrypt = require("bcrypt");
 
 module.exports = {
+  registerUser: async (req, res) => {
+    const inspectUser = await User.findOne({ email: req.body.email });
+    if (inspectUser) {
+      return res.status(400).json({
+        status: "error",
+        message: "email already in use",
+      });
+    }
+    const newUser = new User({
+      ...req.body,
+      password: bcrypt.hashSync(req.body.password, 10),
+    });
+    const result = await newUser.save();
+    return res.status(200).json({
+      status: "success",
+      data: { user: result },
+    });
+  },
+
   profile: (req, res, next) => {
     return res.status(200).json({
       status: "success",
@@ -12,39 +33,65 @@ module.exports = {
 
   updateProfile: async (req, res, next) => {
     const { name, phone, designation, category } = req.body;
-    try {
-      const user = await User.findById(req.user._id);
 
-      if (!user) {
-        return res.status(400).json({
-          status: "success",
-          message: "something went wrong, please try again!",
-        });
-      }
-      if (name) {
-        user.name = name;
-      }
-      if (phone) {
-        user.phone = phone;
-      }
+    const user = await User.findById(req.user._id);
 
-      if (designation) {
-        user.designation = designation;
-      }
-      if (category) {
-        user.category = category;
-      }
-      const updatedDetails = await user.save();
-      return res.status(200).json({
+    if (!user) {
+      return res.status(400).json({
         status: "success",
-        data: {
-          user: updatedDetails,
-        },
+        message: "something went wrong, please try again!",
       });
-    } catch (ex) {
-      return res
-        .status(400)
-        .send({ status: "error", message: "something went wrong" });
     }
+    if (name) {
+      user.name = name;
+    }
+    if (phone) {
+      user.phone = phone;
+    }
+
+    if (designation) {
+      user.designation = designation;
+    }
+    if (category) {
+      user.category = category;
+    }
+    const updatedDetails = await user.save();
+    return res.status(200).json({
+      status: "success",
+      data: {
+        user: updatedDetails,
+      },
+    });
+  },
+
+  /**
+   * @Doctor Controllers
+   */
+
+  doctorBasedOnCategory: async (req, res) => {
+    const user = await User.find({ category: req.params.categoryId });
+    return res.status(200).json({
+      status: "success",
+      data: { user: user },
+    });
+  },
+
+  appointmentsAccToDoctor: async (req, res) => {
+    const appointment = await Appointment.find({ user: req.params.userId });
+    return res.status(200).json({
+      status: "success",
+      data: { appointment: appointment },
+    });
+  },
+
+  editAppointmentDoctor: async (req, res) => {
+    const appointment = await Appointment.findById(req.params.appointmentId);
+    if (req.body.status) {
+      appointment.status = req.body.status;
+    }
+    const result = await appointment.save();
+    return res
+      .status(200)
+      .json({ status: "success", data: { appointment: result } });
   },
 };

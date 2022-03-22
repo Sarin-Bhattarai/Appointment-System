@@ -11,5 +11,5 @@ module.exports = function (req, res, next) {
   });
   console.log(allErrors);
   // next(new CustomError(allErrors, 400));
-  return res.status(400).send({ status: "fail", data: allErrors });
+  return res.status(400).json({ status: "fail", data: allErrors });
 };
