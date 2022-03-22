@@ -1,15 +1,11 @@
 const Appointment = require("../models/appointment");
-const { errorHandler } = require("../helper/error");
 const moment = require("moment");
 
-exports.getAppointment = (req, res) => {
-  Appointment.find().exec((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: errorHandler(err),
-      });
-    }
-    res.json(data);
+exports.getAppointment = async (req, res) => {
+  const appointment = await Appointment.find();
+  return res.status(200).json({
+    message: "success",
+    data: { appointment: appointment },
   });
 };
 

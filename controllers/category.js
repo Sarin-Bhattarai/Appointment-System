@@ -1,26 +1,19 @@
 const Category = require("../models/category");
-const { errorHandler } = require("../helper/error");
 
 exports.createCategory = async (req, res) => {
   const category = new Category(req.body);
-  await category.save((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: errorHandler(err),
-      });
-    }
-    res.json({ data });
+  const result = await category.save();
+  return res.status(200).json({
+    message: "success",
+    data: { result: result },
   });
 };
 
-exports.listCategory = (req, res) => {
-  Category.find().exec((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: errorHandler(err),
-      });
-    }
-    res.json(data);
+exports.listCategory = async (req, res) => {
+  const category = await Category.find();
+  return res.status(200).json({
+    message: "success",
+    data: { category: category },
   });
 };
 

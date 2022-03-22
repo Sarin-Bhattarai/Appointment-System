@@ -11,7 +11,7 @@ const {
 } = require("../validation");
 
 /**
- * @Routes Start here
+ * @Appointment routes Start here
  */
 
 router.get("/appointments", wrapAsync(appointmentController.getAppointment));
