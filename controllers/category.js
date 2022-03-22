@@ -18,7 +18,6 @@ exports.listCategory = async (req, res) => {
 };
 
 exports.readCategory = async (req, res) => {
-<<<<<<< HEAD
   try {
     const category = await Category.findById(req.params.categoryId);
     return res.status(200).json({
@@ -46,7 +45,6 @@ exports.updateCategory = async (req, res) => {
     return res
       .status(400)
       .send({ status: "error", message: "something went wrong" });
-=======
   const category = await Category.findById(req.params.categoryId);
   return res.status(200).json({
     status: "success",
@@ -58,7 +56,6 @@ exports.updateCategory = async (req, res) => {
   const category = await Category.findById(req.params.categoryId);
   if (req.body.name) {
     category.name = req.body.name;
->>>>>>> 6d3141556c291c1fe44b3f2974a1a952d3a0c414
   }
   const updatedCategory = await category.save();
   return res
