@@ -18,6 +18,9 @@ mongoose
   .then(() => console.log("Database Connection Successful"))
   .catch((err) => console.log(err));
 
+
+   //api/categoriies
+   //api/subscription
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
@@ -50,6 +53,13 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.use("*", (req, res, next)=>{
+  res.status(404).json({
+    status: "fail",
+    message: "APi not found"
+  });
+});
 
 const port = process.env.PORT || 3000;
 

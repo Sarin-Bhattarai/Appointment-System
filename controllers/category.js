@@ -25,7 +25,6 @@ exports.listCategory = (req, res) => {
 };
 
 exports.readCategory = async (req, res) => {
-  const id = req.params.categoryId;
   try {
     const category = await Category.findById(req.params.categoryId);
     return res.status(200).json({
@@ -40,7 +39,6 @@ exports.readCategory = async (req, res) => {
 };
 
 exports.updateCategory = async (req, res) => {
-  const id = req.params.categoryId;
   try {
     const category = await Category.findById(req.params.categoryId);
     if (req.body.name) {

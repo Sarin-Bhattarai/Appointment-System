@@ -27,8 +27,8 @@ router.post(
   appointmentValidation(),
   // validateBeginsAt(),
   handleError,
-  verifyLogin,
-  isAdmin,
+  // verifyLogin,
+  // isAdmin,
   createAppointment
 );
 
