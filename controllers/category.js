@@ -18,11 +18,11 @@ exports.listCategory = async (req, res) => {
 };
 
 exports.readCategory = async (req, res) => {
-  const category = await Category.findById(req.params.categoryId);
-  return res.status(200).json({
-    status: "success",
-    data: { category: category },
-  });
+    const category = await Category.findById(req.params.categoryId);
+    return res.status(200).json({
+      status: "success",
+      data: { category: category },
+    });
 };
 
 exports.updateCategory = async (req, res) => {

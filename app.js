@@ -19,6 +19,9 @@ mongoose
   .then(() => console.log("Database Connection Successful"))
   .catch((err) => console.log(err));
 
+
+   //api/categoriies
+   //api/subscription
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", categoryRoutes);
