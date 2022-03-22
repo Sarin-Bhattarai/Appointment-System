@@ -16,7 +16,8 @@ exports.createAppointment = async (req, res) => {
     title: req.body.title,
     startTime: moment(req.body.date + " " + beginsAt),
     endTime: moment(req.body.date + " " + endsAt),
-    user: req.body.user,
+    appointmentWith: req.body.appointmentWith,
+    appointmentFor: req.user._id,
     status: req.body.status,
   };
   const appointment = new Appointment(appointmentDetails);

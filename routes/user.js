@@ -20,9 +20,9 @@ router.post(
 );
 
 //user profile get and update
-router.get("/users", verifyLogin, wrapAsync(userController.profile));
+router.get("/", verifyLogin, wrapAsync(userController.profile));
 
-router.put("/users", verifyLogin, wrapAsync(userController.updateProfile));
+router.put("/", verifyLogin, wrapAsync(userController.updateProfile));
 
 /**
  * @Doctor Routes
@@ -30,7 +30,7 @@ router.put("/users", verifyLogin, wrapAsync(userController.updateProfile));
 
 //get doctor based on categories
 router.get(
-  "/users/:categoryId",
+  "/:categoryId",
   verifyLogin,
   wrapAsync(userController.doctorBasedOnCategory)
 );
@@ -41,12 +41,4 @@ router.get(
   verifyLogin,
   wrapAsync(userController.appointmentsAccToDoctor)
 );
-
-//editing appointments from doctor
-router.put(
-  "/appointments/:appointmentId/:userId",
-  verifyLogin,
-  wrapAsync(userController.editAppointmentDoctor)
-);
-
 module.exports = router;

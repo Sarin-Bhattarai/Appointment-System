@@ -19,13 +19,10 @@ mongoose
   .then(() => console.log("Database Connection Successful"))
   .catch((err) => console.log(err));
 
-
-   //api/categoriies
-   //api/subscription
-app.use("/api", userRoutes);
-app.use("/api", authRoutes);
-app.use("/api", categoryRoutes);
-app.use("/api", appointmentRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/users", authRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -35,7 +32,7 @@ const swaggerOptions = {
       title: "Appointment API",
       descritption: "Appointment API information",
       contact: {
-        name: "Sarin Bhattarai",
+        name: "Sarin Bhattarai and Rohit Shrestha",
       },
       servers: [
         {

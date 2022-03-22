@@ -8,14 +8,11 @@ const handleError = require("../helper/handleError");
 const { wrapAsync } = require("../helper/catchHandler");
 
 //for getting single category
-router.get(
-  "/categories/:categoryId",
-  wrapAsync(categoryController.readCategory)
-);
+router.get("/:categoryId", wrapAsync(categoryController.readCategory));
 
 //for creating the category
 router.post(
-  "/categories",
+  "/",
   categoryValidation(),
   handleError,
   verifyLogin,
@@ -28,7 +25,7 @@ router.get("/categories", wrapAsync(categoryController.listCategory));
 
 //for editing the category
 router.put(
-  "/categories/:categoryId",
+  "/:categoryId",
   editcategoryValidation(),
   handleError,
   verifyLogin,
@@ -38,7 +35,7 @@ router.put(
 
 //for deleting category
 router.delete(
-  "/categories/:categoryId",
+  "/:categoryId",
   verifyLogin,
   isAdmin,
   wrapAsync(categoryController.removeCategory)

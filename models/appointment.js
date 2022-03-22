@@ -15,7 +15,12 @@ const appointmentSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    user: {
+    appointmentWith: {
+      type: ObjectId,
+      ref: "User",
+      required: true,
+    },
+    appointmentFor: {
       type: ObjectId,
       ref: "User",
       required: true,

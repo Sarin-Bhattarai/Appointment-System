@@ -77,21 +77,12 @@ module.exports = {
   },
 
   appointmentsAccToDoctor: async (req, res) => {
-    const appointment = await Appointment.find({ user: req.params.userId });
+    const appointment = await Appointment.find({
+      appointmentWith: req.params.userId,
+    });
     return res.status(200).json({
       status: "success",
       data: { appointment: appointment },
     });
-  },
-
-  editAppointmentDoctor: async (req, res) => {
-    const appointment = await Appointment.findById(req.params.appointmentId);
-    if (req.body.status) {
-      appointment.status = req.body.status;
-    }
-    const result = await appointment.save();
-    return res
-      .status(200)
-      .json({ status: "success", data: { appointment: result } });
   },
 };

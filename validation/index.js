@@ -62,48 +62,46 @@ const appointmentValidation = () => {
   return [
     body("title").isString().withMessage("Not a valid title"),
     body("date").isDate().withMessage("Not a valid date"),
-    body("user").isString().withMessage("Not a valid user"),
-    body("beginsAt").exists().withMessage("beginsAt is required").custom((value, {req})=>{
-      const currentDate = new Date();
-      const date = req.body.date;
+    body("appointmentWith").isString().withMessage("Not a valid user"),
+    body("beginsAt")
+      .exists()
+      .withMessage("beginsAt is required")
+      .custom((value, { req }) => {
+        const currentDate = new Date();
+        const date = req.body.date;
 
-      const appointmentStart = moment(date + " " + value);
-      req.appointmentStart = appointmentStart;
-      if(currentDate < appointmentStart){
-        return Promise.resolve()
-      }else{
-        return Promise.reject("Please select appropriate date and time for end of appointment")
-      }
-    }),
-    body("endsAt").exists().withMessage("endsAt is required").custom((value, {req})=>{
-      const currentDate = new Date();
-      const date = req.body.date;
+        const appointmentStart = moment(date + " " + value);
+        req.appointmentStart = appointmentStart;
+        if (currentDate < appointmentStart) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject(
+            "Please select appropriate date and time for end of appointment"
+          );
+        }
+      }),
+    body("endsAt")
+      .exists()
+      .withMessage("endsAt is required")
+      .custom((value, { req }) => {
+        const currentDate = new Date();
+        const date = req.body.date;
 
-      const appointmentEnd = moment(date + " " + value);
-      if(currentDate < appointmentEnd && appointmentEnd > req.appointmentStart){
-        return Promise.resolve()
-      }else{
-        return Promise.reject("Please select appropriate date and time for end of appointment")
-      }
-    }),
+        const appointmentEnd = moment(date + " " + value);
+        if (
+          currentDate < appointmentEnd &&
+          appointmentEnd > req.appointmentStart
+        ) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject(
+            "Please select appropriate date and time for end of appointment"
+          );
+        }
+      }),
     body("status").isString().withMessage("Not a valid status"),
   ];
 };
-
-function validateBeginsAt() {
-
-  return [
-    body("beginsAt").custom(async (value) => {
-      console.log(value);
-      const currentDate = new Date();
-      if (value >= currentDate) {
-        return Promise.resolve();
-      } else {
-        throw new Error("Date not Valid");
-      }
-    }),
-  ];
-}
 
 const editAppointmentValidation = () => {
   return [
@@ -119,5 +117,4 @@ module.exports = {
   editcategoryValidation,
   appointmentValidation,
   editAppointmentValidation,
-  // validateBeginsAt,
 };
