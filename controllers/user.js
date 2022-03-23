@@ -38,7 +38,7 @@ module.exports = {
 
     if (!user) {
       return res.status(400).json({
-        status: "success",
+        status: "error",
         message: "something went wrong, please try again!",
       });
     }

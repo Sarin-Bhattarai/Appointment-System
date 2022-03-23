@@ -28,7 +28,7 @@ const swaggerOptions = {
   swaggerDefinition: {
     components: {},
     info: {
-      version: "1.0.0",
+      version: "2.0.0",
       title: "Appointment API",
       descritption: "Appointment API information",
       contact: {
