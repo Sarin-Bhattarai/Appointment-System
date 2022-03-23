@@ -85,4 +85,14 @@ module.exports = {
       data: { appointment: appointment },
     });
   },
+
+  getAppointmentOfUser: async (req, res) => {
+    const appointment = await Appointment.find({
+      appointmentFor: req.user._id,
+    });
+    return res.status(200).json({
+      status: "success",
+      data: { appointment: appointment },
+    });
+  },
 };

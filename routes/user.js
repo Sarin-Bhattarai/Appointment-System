@@ -41,4 +41,11 @@ router.get(
   verifyLogin,
   wrapAsync(userController.appointmentsAccToDoctor)
 );
+
+//for getting own appointment done by user
+router.get(
+  "/my/appointments",
+  verifyLogin,
+  wrapAsync(userController.getAppointmentOfUser)
+);
 module.exports = router;
