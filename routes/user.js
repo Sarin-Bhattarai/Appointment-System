@@ -17,47 +17,44 @@ const router = express.Router();
 /**
  * @swagger
  * /api/users/register:
- *  post:
- *    summary: Register the user
- *    tags: [User]
+ *   post:
+ *    tags:
+ *      - User
+ *    summary: register user
+ *    produces:
+ *    -application/json
  *    parameters:
- *       - in: body
- *         name: name
- *         schema:
- *         - type: string
- *         required: true
- *         description: User's name
- *       - in: body
- *         name: email
- *         schema:
- *         - type: string
- *         required: true
- *         description: User's email
- *       - in: body
- *         name: password
- *         schema:
- *         - type: string
- *         required: true
- *         description: User's password
- *       - in: body
- *         name: phone
- *         schema:
- *         - type: integer
- *         required: true
- *         description: User's phone
- *       - in: body
- *         name: designation
- *         schema:
- *         - type: string
- *         required: true
- *         description: User's designation
- *    requestBody:
+ *    - in: body
+ *      name: name
+ *      description: users's name
  *      required: true
+ *      type: string
+ *    - in: body
+ *      name: email
+ *      description: users's email
+ *      required: true
+ *      type: string
+ *      format: email
+ *    - in: body
+ *      name: password
+ *      description: users's password
+ *      required: true
+ *      type: string
+ *    - in: body
+ *      name: phone
+ *      description: users's phone
+ *      required: true
+ *      type: number
+ *    - in: body
+ *      name: designation
+ *      description: users's designation
+ *      required: true
+ *      type: string
  *    responses:
- *      200:
- *        description: success
- *      400:
- *        description: email already in use
+ *        200:
+ *          description: success
+ *        400:
+ *          description: email already in use
  */
 
 router.post(
@@ -73,7 +70,9 @@ router.post(
  *   get:
  *    tags:
  *      - User
- *    summary: Fetchs user profile
+ *    summary: fetchs user profile
+ *    security:
+ *      -  BearerAuth: [Login]
  *    produces:
  *    -application/json
  *    responses:
@@ -89,6 +88,8 @@ router.get("/", verifyLogin, wrapAsync(userController.profile));
  *    tags:
  *      - User
  *    summary: updates user profile
+ *    security:
+ *      -  BearerAuth: [Login]
  *    produces:
  *    -application/json
  *    parameters:
@@ -122,27 +123,86 @@ router.get("/", verifyLogin, wrapAsync(userController.profile));
 router.put("/", verifyLogin, wrapAsync(userController.updateProfile));
 
 /**
+ * @swagger
+ * /api/users/my/appointments:
+ *   get:
+ *    tags:
+ *      - User
+ *    summary: get user's appointment
+ *    security:
+ *      -  BearerAuth: [Login]
+ *    produces:
+ *    -application/json
+ *    responses:
+ *        200:
+ *          description: success
+ *        401:
+ *          description: not authenticated
+ */
+router.get(
+  "/my/appointments",
+  verifyLogin,
+  wrapAsync(userController.getAppointmentOfUser)
+);
+
+/**
  * @Doctor Routes
  */
 
-//get doctor based on categories
+/**
+ * @swagger
+ * /api/users/{categoryId}:
+ *   get:
+ *    tags:
+ *      - User
+ *    summary: fetch doctors based on their category
+ *    security:
+ *      -  BearerAuth: [Login]
+ *    produces:
+ *    -application/json
+ *    parameters:
+ *    - in: path
+ *      name: categoryId
+ *      descritption: categoryId
+ *      required: true
+ *      type: string
+ *    responses:
+ *        200:
+ *          description: success
+ */
+
 router.get(
   "/:categoryId",
   verifyLogin,
   wrapAsync(userController.doctorBasedOnCategory)
 );
 
-//get appointments according to doctor
+/**
+ * @swagger
+ * /api/users/appointments/{userId}:
+ *   get:
+ *    tags:
+ *      - User
+ *    summary: fetch doctors based on their category
+ *    security:
+ *      -  BearerAuth: [Login]
+ *    produces:
+ *    -application/json
+ *    parameters:
+ *    - in: path
+ *      name: categoryId
+ *      descritption: categoryId
+ *      required: true
+ *      type: string
+ *    responses:
+ *        200:
+ *          description: Fetch appointments matching with doctor
+ */
+
 router.get(
   "/appointments/:userId",
   verifyLogin,
   wrapAsync(userController.appointmentsAccToDoctor)
 );
 
-//for getting own appointment done by user
-router.get(
-  "/my/appointments",
-  verifyLogin,
-  wrapAsync(userController.getAppointmentOfUser)
-);
 module.exports = router;
